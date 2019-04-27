@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% set mainnavindex = 1 %}
+
+{% block title %}
+Archives - {{ SITENAME }}
+{% endblock %}
+
+{% block meta %}
+<meta name="robots" content="noindex,follow" />
+{% endblock %}
+
+{% block content %}
+<section class="archives">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/all">Lifestream</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Archives</li>
+      </ol>
+    </nav>
+    
+    <h1 class="mb-4">Archives</h1>
+    
+    <div class="list-group year-group">
+        {% for year, articles_by_year in dates | groupby('date.year') | reverse %}
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="{{ SITEURL }}/{{ year }}">{{ year }}</a>
+            <div class="badge badge-primary badge-pill">
+                {{ articles_by_year | count}}
+            </div>
+        </div>
+        <div class="list-group month-group">
+            {% for month, articles_by_month in articles_by_year | groupby('date.month') | reverse %}
+            {% set month_name = articles_by_month[0].date.strftime('%B') %}
+            <div class="list-group-item month-group-item d-flex
+                        justify-content-between align-items-center pl-5">
+                <a href="{{ SITEURL }}/{{ year }}/{{ '%02d' % month }}">{{ month_name }}</a>
+                
+                <div class="badge badge-primary badge-pill">
+                    {{  articles_by_month | count }}
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

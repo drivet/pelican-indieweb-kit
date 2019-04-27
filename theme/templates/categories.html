@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% set mainnavindex = 1 %}
+
+{% block title %}
+Categories - {{ SITENAME }}
+{% endblock %}
+
+{% block meta %}
+<meta name="robots" content="noindex,follow" />
+{% endblock %}
+
+{% block content %}
+<section class="categories">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/all">Lifestream</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Categories</li>
+      </ol>
+    </nav>
+    
+    <h1 class="mb-4">Categories</h1>
+    
+    <div class="list-group category-group">
+        {% for category, articles_by_category in categories %}
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="{{ SITEURL }}/{{ category.url }}">{{ category }}</a>
+            <div class="badge badge-primary badge-pill">
+                {{ articles_by_category | count }}
+            </div>
+        </div>
+
+        {%
+        set articles_with_subcategory =
+           articles_by_category | map(attribute='subcategories') |
+        map('count') | select('greaterthan', 0)
+        %} 
+
+        {% if articles_with_subcategory|list|count > 0 %}
+        
+        <div class="list-group subcategory-group">
+            {% for subcategory_shortname, articles_by_subcategory in
+                  articles_by_category  | groupby('subcategories.0.shortname')  %}
+            {% set subcategory = articles_by_subcategory[0].subcategories[0] %}
+            <div class="list-group-item month-group-item d-flex
+                        justify-content-between align-items-center pl-5">
+                
+                <a href="{{ SITEURL }}/{{ subcategory.url }}">{{ subcategory.shortname }}</a>
+                
+                <div class="badge badge-primary badge-pill">
+                    {{ articles_by_subcategory | count }}
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

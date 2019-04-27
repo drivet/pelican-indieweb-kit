@@ -1,0 +1,22 @@
+<div class="article-info text-muted">
+    <div class="article-info-line">
+        <time class="article-info-span"
+              datetime="{{ article.date.isoformat() }}">
+            {{ article.locale_date }}
+        </time>
+        &#183;
+        <span class="article-info-span">
+            {% if article.author %}
+            <a class="p-author h-card"
+               href="{{ SITEURL }}">{{article.author}}</a>
+            {% else %}
+            <a class="p-author h-card"
+               href="{{ SITEURL }}">{{AUTHOR}}</a>
+            {% endif %}
+        </span>
+        &#183;
+        <a class="u-url article-info-span" title="Permalink" href="{{ SITEURL }}/{{article.url}}">
+            <span class="fa fa-link"></span>
+        </a>
+    </div>
+</div>

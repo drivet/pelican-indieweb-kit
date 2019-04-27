@@ -1,0 +1,20 @@
+<div class="card">
+    <div class="card-body">
+        <header class="article-header">
+            {% include 'includes/article_info_head.html' %}
+        </header>
+        <div class="mt-2">
+            <h2 class="title"><a href="{{ SITEURL }}/{{ article.url }}"
+                                 class="p-name u-url">{{ article.title }}</a>
+            </h2>
+            <div class="summary p-summary">
+                {{ article.summary }}
+                <a class="btn btn-primary" role="button"
+                   href="{{ SITEURL }}/{{ article.url}}">Read more</a>
+            </div>
+        </div>
+    </div>
+    <footer class="card-footer bg-light">
+    {% include 'includes/article_info_foot.html' %}
+    </footer>
+</div>

@@ -1,0 +1,40 @@
+{% extends "article_list.html" %}
+
+{% set mainnavindex = 1 %}
+
+{% block title %}
+{{ BLOGNAME }} - {{ SITENAME }}
+{% endblock %}
+
+{% block meta %}
+<meta name="author" content="{{ AUTHOR }}" />
+<meta name="robots" content="noindex,follow" />
+{% endblock %}
+
+{% block article_list_title %}
+<header class="d-flex mb-4">
+    <h1 class="title mr-auto">{{ BLOGNAME }}</h1>
+    {% if CATEGORIES_SAVE_AS %}
+    <a class="align-self-center ml-2" title="Categories"
+       href="{{ SITEURL }}/{{ CATEGORIES_URL }}"> 
+        <span class="fa fa-folder mr-1"></span></a>
+    {% endif %}
+
+    {% if TAGS_SAVE_AS %}
+    <a class="align-self-center ml-2" title="Tags"
+       href="{{ SITEURL }}/{{ TAGS_URL }}"> 
+        <span class="fa fa-tag fa-flip-horizontal mr-1"></span></a>
+    {% endif %}
+
+    {% if ARCHIVES_SAVE_AS %}
+    <a class="align-self-center ml-2" title="Archives"
+       href="{{ SITEURL }}/{{ ARCHIVES_URL }}"> 
+        <span class="fa fa-archive mr-1"></span></a>
+    {% endif %}
+    
+    {% if FEED_ALL_RSS %}
+    <a class="align-self-center ml-2" href="{{ SITEURL }}/{{ FEED_ALL_RSS }}">
+        <span class="fa fa-rss-square mr-1"></span></a>
+    {% endif %}
+</header>
+{% endblock %}

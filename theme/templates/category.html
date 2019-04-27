@@ -1,0 +1,30 @@
+{#
+I'm using pelican categories to organize out my posts into broad types, like
+blog entries, notes, bookmarks, etc.
+#}
+{% extends "article_list.html" %}
+
+{% if category == "blog" %}
+{% set mainnavindex = 3 %}
+{% elif category == "notes" %}
+{% set mainnavindex = 2 %}
+{% endif %}
+
+{% block title %}
+{{ category|capitalize }} - {{ SITENAME }}
+{% endblock %}
+
+{% block meta %}
+<meta name="author" content="{{ AUTHOR }}" />
+<meta name="robots" content="noindex,follow" />
+{% endblock %}
+
+{% block article_list_title %}
+<header class="d-flex mb-4">
+    <h1 class="title mr-auto">{{ category|capitalize }}</h1>
+    {% if CATEGORY_FEED_RSS %}
+    <a class="align-self-center" href="{{ SITEURL }}/{{ CATEGORY_FEED_RSS.format(slug=category) }}">
+        <span class="fa fa-rss-square mr-1"></span></a>
+    {% endif %}
+</header>
+{% endblock %}

@@ -1,0 +1,60 @@
+html {
+    font-size: 16px;
+    
+}
+body {
+    font-family: 'Lato', serif;
+}
+
+h1 {
+    font-size: 2rem;
+}
+
+h2 {
+    font-size: 1.6rem;
+}
+
+h3 {
+    font-size: 1.4rem;
+}
+
+h4 {
+    font-size: 1.2rem;
+}
+
+h5 {
+    font-size: 1rem;
+}
+
+h6 {
+    font-size: 0.8rem;
+}
+
+a {
+    color: #337ab7;
+    text-decoration: none;
+}
+
+.nav-link.active {
+    color: #337ab7 !important;
+}
+
+.btn-primary {
+    background-color: #588ebb;
+    border-color: #588ebb;
+}
+
+.page-item.active .page-link {
+    background-color: #337ab7;
+    border-color: #337ab7;
+}
+
+.page-link {
+    color:  #337ab7;
+}
+
+.bg-light {
+    /* background-color: #f5f5dc !important; */
+    /* background-color: #fffee5 !important; */
+   background-color: #f7f7f7 !important;
+}

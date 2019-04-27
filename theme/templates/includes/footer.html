@@ -1,0 +1,28 @@
+<footer class="page-footer my-4">
+   <div class="container">
+      <div class="row">
+         {% if articles %}
+            {% set copy_date = articles[0].date.strftime('%Y') %}
+         {% else %}
+            {% set copy_date = '' %}
+         {% endif %}
+         <div class="mr-auto">&copy;
+             {{ copy_date }}
+             <a class="p-author h-card" href="{{ SITEURL }}">{{AUTHOR}}</a>
+            &middot; Powered by
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>
+            {% if article and article.source_path %}
+            &middot;
+            <a href="{{ EDIT_ROOT }}{{ article.source_path[PATH|length:] }}">Edit</a>
+            {% elif page and page.source_path %}
+            &middot;
+            <a href="{{ EDIT_ROOT }}{{ page.source_path[PATH|length:] }}">Edit</a>
+            {% endif %}
+         </div>
+         <div>
+             <i class="fa fa-arrow-up"></i> <a href="#">Back to top</a>
+         </div>
+      </div>
+   </div>
+</footer>

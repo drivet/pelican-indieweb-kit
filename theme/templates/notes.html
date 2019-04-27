@@ -1,0 +1,23 @@
+{% extends "article_list.html" %}
+
+{% set mainnavindex = 2 %}
+
+{% block title %}
+{{ NOTE_TITLE }} - {{ SITENAME }}
+{% endblock%}
+
+{% block meta %}
+<meta name="author" content="{{ AUTHOR }}" />
+<meta name="robots" content="noindex,follow" />
+{% endblock %}
+
+
+{% block article_list_title %}
+<header class="d-flex mb-4">
+    <h1 class="title mr-auto">{{ NOTE_TITLE }}</h1>
+    {% if NOTE_FEED_RSS %}
+    <a class="align-self-center" href="{{ SITEURL }}/{{ NOTE_FEED_RSS }}">
+        <span class="fa fa-rss-square mr-1"></span>Subscribe</a>
+    {% endif %}
+</header>
+{% endblock %}

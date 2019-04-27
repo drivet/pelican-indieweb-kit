@@ -1,0 +1,17 @@
+{% if ISSO_SERVER %}
+    <hr/>
+    <section class="comments" id="comments">
+        <h2>Comments</h2>
+
+        <div id="isso-thread"></div>
+        <script 
+             data-isso="{{ ISSO_SERVER }}"
+             data-isso-reply-to-self="false"
+             data-isso-require-author="true"
+             data-isso-require-email="true"
+             src="{{ ISSO_SERVER }}/js/embed.min.js">
+        </script>
+        <noscript>Please enable JavaScript to view the comments. </noscript>
+        Comments powered by <a href="https://posativ.org/isso">Isso.</a>
+    </section>
+{% endif %}

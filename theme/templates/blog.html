@@ -1,0 +1,39 @@
+{% extends "article_list.html" %}
+
+{% set mainnavindex = 3 %}
+
+{% block title %}
+{{ BLOGENTRY_TITLE }} - {{ SITENAME }}
+{% endblock %}
+
+{% block meta %}
+<meta name="author" content="{{ AUTHOR }}" />
+<meta name="robots" content="noindex,follow" />
+{% endblock %}
+
+{% block article_list_title %}
+<header class="d-flex mb-4">
+    <h1 class="title mr-auto">{{ BLOGENTRY_TITLE }}</h1>
+    {% if BLOGENTRY_FEED_RSS %}
+    <a class="align-self-center" title="Subscribe" href="{{ SITEURL }}/{{ BLOGENTRY_FEED_RSS }}">
+        <span class="fa fa-rss-square mr-2"></span></a>
+    {% endif %}
+    {% if CATEGORIES_SAVE_AS %}
+    <a class="align-self-center" title="Categories"
+        href="{{ SITEURL }}/{{ CATEGORIES_URL | default('categories.html') }}"> 
+        <span class="fa fa-folder mr-2"></span></a>
+    {% endif %}
+    {% if TAGS_SAVE_AS %}
+    <a class="align-self-center" title="Tags"
+       href="{{ SITEURL }}/{{ TAGS_URL | default('tags.html') }}"> 
+        <span class="fa fa-tag fa-flip-horizontal mr-2"></span></a>
+    {% endif %} 
+    {% if ARCHIVES_SAVE_AS %}
+    <a class="align-self-center" title="Archives"
+       href="{{ SITEURL }}/{{ ARCHIVES_URL | default('archives.html') }}"> 
+        <span class="fa fa-archive mr-2"></span></a>
+    {% endif %}  
+</header>
+{% endblock %}
+
+

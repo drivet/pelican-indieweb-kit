@@ -1,0 +1,28 @@
+{% if article.photos %}
+{% set photos = article.photos.split(',') %}
+{% endif %}
+{% if article.photos_alt %}
+{% set photos_alt = article.photos_alt.split('(?<!x),') %}
+{% endif %}
+
+<div class="card">
+    <div class="card-body">
+        <div class="card-text">
+            <header class="article-header">
+                {% include 'includes/article_info_head.html' %}
+            </header>
+            <div class="my-2 entry-content e-content">
+                {{ article.content }}
+                {% for photo in photos %}
+                {% if photos_alt %}
+                <img src="{{photo}}" alt="{{ photos_alt[loop.index0] | replace('\,', ',') }}"
+                     class="u-photo embedded-photo"/>
+                {% else %}
+                <img src="{{photo}}" class="u-photo embedded-photo"/>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% include 'includes/article_info_foot.html' %}
+        </div>
+    </div>
+</div>

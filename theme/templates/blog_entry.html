@@ -1,0 +1,12 @@
+<header class="article-header">
+    {% include 'includes/article_info_head.html' %}
+</header>
+<div class="mt-2">
+    <h1 class="p-name title">{{ article.title }}</h1>
+    <div class="entry-content e-content">
+        {{ article.content }}
+    </div>
+</div>
+<footer>
+    {% include 'includes/article_info_foot.html' %}
+</footer>

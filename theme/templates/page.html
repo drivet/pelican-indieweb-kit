@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% if page.slug == 'design-notes' %}
+{% set mainnavindex = 1 %}
+{% endif %}
+
+{% block title %}{{ page.title }} - {{ SITENAME }}{% endblock %}
+{% block html_lang %}{{ page.lang }}{% endblock %}
+
+
+{% block meta %}
+{% if page.author %}
+<meta name="author" content="{{ page.author }}" />
+{% else %}
+<meta name="author" content="{{ AUTHOR }}" />
+{% endif %}
+{% if page.summary %}
+<meta name="description" content="{{ page.summary|striptags|escape }}" />
+{% endif %}
+
+{% endblock %}
+
+
+{% block opengraph %}
+{% if OPEN_GRAPH_FB_APP_ID %}
+<meta property="fb:app_id" content="{{ OPEN_GRAPH_FB_APP_ID }}"/>
+{% endif %}
+<meta property="og:site_name" content="{{ SITENAME }}" />
+<meta property="og:type" content="article"/>
+<meta property="og:title" content="{{ page.title|striptags|escape }}"/>
+<meta property="og:url" content="{{ SITEURL }}/{{ page.url }}"/>
+<meta property="og:description" content="{{ page.summary|striptags|escape }}" />
+{% if page.og_image %}
+<meta property="og:image"
+      content="{{ SITEURL }}/{{ page.og_image }}"/>
+{% elif OPEN_GRAPH_IMAGE %}
+<meta property="og:image"
+      content="{{ SITEURL }}/{{ OPEN_GRAPH_IMAGE }}"/>
+{% endif %}
+{% endblock %}
+
+
+{% block link %}
+{% if WEBMENTION_ENDPOINT %}
+<link rel="webmention" href="{{ WEBMENTION_ENDPOINT }}"/>
+{% endif %}
+{% endblock %}
+
+
+{% block content %}
+<article id="content" class="body">
+    {% if page.title %}
+    <header class="page-header">
+        <h1 class="title">{% if page.heading %}{{ page.heading }}{% else %}{{ page.title }}{% endif %}</h1>
+    </header>
+    {% endif %}
+
+    <div class="entry-content">
+        {{ page.content }}
+        {% if page.comments == 'enabled' %}
+        {% include 'includes/comments.html' %}
+        {% endif %}
+    </div>
+</article>
+{% endblock %}

@@ -1,0 +1,76 @@
+<div class="article-info text-muted">
+    <div class="article-info-line d-flex">
+
+        {% if article.subcategories %}
+        <span class="article-info-span">
+            <span class="fa fa-folder"></span>
+            <a href="{{ SITEURL }}/{{article.subcategories[0].url}}" class="p-category">
+                {{article.subcategories[0].shortname}}
+            </a>
+        </span>
+        {% endif %}
+
+        {% if article.tags %}
+        &#183;
+        <span class="article-info-span">
+            <span class="fa fa-tag fa-flip-horizontal"></span>
+            {% for tag in article.tags: %}
+            <a href="{{ SITEURL }}/{{ tag.url }}" class="p-category">
+                {{tag}}
+            </a>
+            {% if not loop.last %},{% endif %}
+            {% endfor %}
+        </span>
+        {% endif %}
+    </div>
+    <div class="article-info-line d-flex">
+        <span class="webmention">
+            <i class="far fa-heart"></i>
+        </span>
+        <span class="webmention">
+            <i class="fas fa-retweet"></i>
+        </span>
+        <span class="webmention">
+            <i class="far fa-comment"></i>
+        </span>
+        <span class="mr-auto"></span>
+
+        {% if article.hashtags %}  
+        <span class="article-info-span">
+            {% for tag in article.hashtags: %}
+            <a href="{{ TWITTER_HASHTAG.format(hashtag=tag) }}" class="p-category">
+                #{{tag}}
+            </a>
+            {% if not loop.last %},{% endif %}
+            {% endfor %}
+        </span>
+        {% endif %}
+
+        {% if article.twitter_id %}
+        <span class="article-info-span">
+            <a href="{{ TWITTER_LINK.format(twitterid=article.twitter_id) }}">
+                <i class="fab fa-twitter"></i>
+            </a>
+        </span>
+        {% endif %}
+
+        {% for syndication in article.syndication %}
+        {% if syndication.startswith('https://twitter.com') %}
+        <span class="article-info-span">
+            <a class="u-syndication" href="{{syndication}}">
+                <i class="fab fa-twitter"></i>
+            </a>
+        </span>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+{# do not include this in the article's content area, because I don't
+   want it to contribute to Twitter's character limitation.
+#}
+{% if article.mp_syndicate_to %}
+{% for syndication_target in article.mp_syndicate_to %}
+<a href="{{syndication_target}}"></a>
+{% endfor %}
+{% endif %}

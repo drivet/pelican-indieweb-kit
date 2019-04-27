@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% set mainnavindex = 1 %}
+
+{% block title %}Tags - {{ SITENAME }}{% endblock %}
+
+{% block meta %}
+<meta name="robots" content="noindex,follow" />
+{% endblock %}
+
+{% block content %}
+<section class="tags">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/all">Lifestream</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Tags</li>
+      </ol>
+    </nav>
+
+    <h1 class="mb-4">Tags</h1>
+    
+    <ul class="list-group">
+        {%- for tag, articles in tags|sort %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="{{ SITEURL }}/{{ tag.url }}">{{ tag }}</a>
+            <div class="badge badge-primary badge-pill">
+                {{ articles|count }}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% if articles_page and articles_paginator.num_pages > 1 %}
+<nav aria-label="post list pages" class="d-flex">
+    <div class="mr-auto">
+    {% if articles_page.has_previous() %}
+    {% set num = articles_page.previous_page_number() %}
+    <a title="Prev" rel="prev" href="{{ SITEURL }}/{{ articles_previous_page.url }}">
+       &laquo;  Previous
+    </a>
+    {% else %}
+    <span class="disabled">&laquo; Previous</span>
+    
+    {% endif %}
+    </div>
+    
+    <div class="align-self-center">
+    {% if articles_page.has_next() %}
+    
+    <a title="Next" href="{{ SITEURL }}/{{articles_next_page.url }}" rel="next">
+        Next &raquo;
+    </a>
+    {% else %}
+    <span class="disabled">Next &raquo;</span>
+    {% endif %}
+    </div>
+    
+</nav>
+{% endif %}

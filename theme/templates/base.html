@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+{% if USE_OPEN_GRAPH is not defined %}
+{% set USE_OPEN_GRAPH = True %}
+{% endif %}
+<html lang="{% block html_lang %}{{ DEFAULT_LANG }}{% endblock %}"
+{% if USE_OPEN_GRAPH %} 
+      prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#"
+{% endif %}>
+<head>
+    <title>{% block title %}{{ SITENAME }}{% endblock %}</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {# Favicons are a touchy subject. For reasoning for the following code,
+    see: http://stackoverflow.com/a/23851464/872397 #}
+    
+    {% if FAVICON %}
+    <link href="{{ SITEURL }}/{{ FAVICON }}" rel="icon">
+    {% endif %}
+    {% if FAVICON_IE %}
+    <!--[if IE]><link rel="shortcut icon" href="{{ SITEURL }}/{{ FAVICON_IE }}"><![endif]-->
+    {% endif %}
+    {% if TOUCHICON %}
+    <link rel="apple-touch-icon" href="{{ SITEURL }}/{{ TOUCHICON }}">
+    {% endif %}
+
+    {% if articles_page and articles_paginator.num_pages > 1 %}
+    {% if articles_page.has_next() %}
+    <link rel="next" href="{{ SITEURL }}/{{ articles_next_page.url }}">
+    {% endif %}
+    {% if articles_page.has_previous() %}
+    <link rel="prev" href="{{ SITEURL }}/{{ articles_previous_page.url }}">
+    {% endif %}
+    {% endif %}
+
+    {% block meta %}
+    <meta name="author" content="{{ AUTHOR }}" />
+    {% endblock %}
+
+    {# Open Graph tags #}
+    {% if USE_OPEN_GRAPH %}
+    {% block opengraph %}
+    <!-- Open Graph tags -->
+    {% if OPEN_GRAPH_FB_APP_ID %}
+    <meta property="fb:app_id" content="{{ OPEN_GRAPH_FB_APP_ID }}"/>
+    {% endif %}
+    <meta property="og:site_name" content="{{ SITENAME }}" />
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="{{ SITENAME }}"/>
+    <meta property="og:url" content="{{ SITEURL }}"/>
+    <meta property="og:description" content="{{ SITENAME }}"/>
+    {% if OPEN_GRAPH_IMAGE %}
+    <meta property="og:image"
+          content="{{ SITEURL }}/{{ OPEN_GRAPH_IMAGE }}"/>
+    {% endif %}
+    {% endblock %}
+    {% endif %}
+    
+    <link rel="stylesheet" href="{{ SITEURL }}/{{ THEME_STATIC_DIR }}/css/bootstrap.min.css" type="text/css"/>
+    <link href="{{ SITEURL }}/{{ THEME_STATIC_DIR }}/fontawesome/css/all.min.css" rel="stylesheet">
+    <link href="{{ SITEURL }}/{{ THEME_STATIC_DIR }}/css/pygments/{{ PYGMENTS_STYLE|default('native') }}.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ SITEURL }}/{{ THEME_STATIC_DIR }}/css/style.css" type="text/css"/>
+
+    {% if 'tipue_search' in PLUGINS and page_name == 'search'%}
+    <link href="{{ SITEURL}}/{{ THEME_STATIC_DIR -}}/tipuesearch/tipuesearch.css" rel="stylesheet">
+    {% endif %}
+
+    {% if CUSTOM_CSS %}
+    <link href="{{ SITEURL }}/{{ CUSTOM_CSS }}" rel="stylesheet">
+    {% endif %}
+ 
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Slab|Lato|Old+Standard+TT|Open+Sans|PT+Sans|PT+Serif|Roboto|Source+Sans+Pro"
+          rel="stylesheet">
+
+    <!-- I guess it makes sense that RSS/Atom feeds should be on every page? -->
+    <!-- TODO: add support for extra/other RSS/Atom feeds -->
+    {% if FEED_ALL_ATOM %}
+    <link href="{{ SITEURL }}/{{ FEED_ALL_ATOM }}"
+          type="application/atom+xml" rel="alternate"
+          title="{{ SITENAME }} ATOM Feed"/>
+    {% endif %}
+
+    {% if FEED_ALL_RSS %}
+    <link href="{{ SITEURL }}/{{ FEED_ALL_RSS }}"
+          type="application/rss+xml" rel="alternate"
+          title="{{ SITENAME }} RSS Feed"/>
+    {% endif %}
+
+    {% if tag and TAG_FEED_ATOM %}
+    <link href="{{ SITEURL }}/{{ TAG_FEED_ATOM|format(tag.slug) }}"
+          type="application/atom+xml" rel="alternate"
+          title="{{ SITENAME }} {{ tag }} ATOM Feed"/>
+    {% endif %}
+
+    {% if category and CATEGORY_FEED_ATOM %}
+    <link href="{{ SITEURL }}/{{ CATEGORY_FEED_ATOM|format(category.slug) }}"
+          type="application/atom+xml" rel="alternate"
+          title="{{ SITENAME }} {{ category }} ATOM Feed"/>
+    {% endif %}
+
+    {% if AUTH_ENDPOINT %}
+    <link rel="authorization_endpoint" href="{{ AUTH_ENDPOINT }}"/>
+    {% endif %}
+
+    {% if TOKEN_ENDPOINT %}
+    <link rel="token_endpoint" href="{{ TOKEN_ENDPOINT }}"/>
+    {% endif %}
+    
+    {% if MICROPUB_ENDPOINT %}
+    <link rel="micropub" href="{{ MICROPUB_ENDPOINT }}"/>
+    {% endif %}
+
+    {% block link %}
+    {% endblock %}
+
+    <link rel="feed" href="{{ SITEURL }}/{{ INDEX_URL }}" type="text/html"/>
+</head>
+<body>
+    <nav class="navbar-main navbar navbar-expand-lg navbar-light bg-white fixed-top" role="navigation">
+        <a href="{{ SITEURL }}/" class="navbar-brand">
+            {% if SITELOGO %}
+            <img class="img-responsive pull-left gap-right" 
+                 src="{{ SITEURL }}/{{ SITELOGO }}" width="{{SITELOGO_SIZE }}"/>
+            {% endif %}
+            {% if not HIDE_SITENAME %}{{ SITENAME }}{% endif %}
+        </a>
+        {% if MENUITEMS %}
+        <button class="navbar-toggler"
+                type="button"
+                data-toggle="collapse"
+                data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        {% endif %}
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                {% for title, link in MENUITEMS %}
+                <li class="nav-item">
+                    <a class="nav-link {{'active' if loop.index == mainnavindex }}"
+                       href="{{ link }}">{{ title }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+            
+            <ul class="navbar-nav social-nav flex-row">
+                {% if SOCIAL %}
+                {% for s in SOCIAL %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ s[1] }}" title="{{ s[0] }}">
+                        <i class="{{ s[2] }}"></i>
+                    </a>
+                </li>
+                {% endfor %}
+                {% endif %}
+            </ul>
+            {% if 'tipue_search' in PLUGINS %}
+            <ul class="navbar-nav">
+                <li class="nav-item d-flex align-items-center mr-2">
+                    <form role="search" action="{{ SEARCH_URL | default('/search.html') }}">
+                        <div class="input-group input-group-sm">
+                            <input type="search" class="search-query form-control" 
+                                   placeholder="Search" name="q" id="tipue_search_input" required>
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <span class="fa fa-search"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </li>
+            </ul>
+            {% endif %}
+        </div>
+    </nav>
+
+
+    {% block banner %}{% endblock %}
+
+    <div class="maincontent container mt-4">
+        <div class="row">
+            <div class="offset-sm-0 col-sm-12 offset-md-1 col-md-10 offset-lg-2 col-lg-8">
+                {% block content %}{% endblock %}
+            </div>    
+        </div>
+        {% include 'includes/footer.html' %}
+    </div>
+
+    <script src="{{ SITEURL }}/{{ THEME_STATIC_DIR }}/js/jquery.min.js"></script>
+    <script src="{{ SITEURL }}/{{ THEME_STATIC_DIR }}/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ SITEURL }}/{{ THEME_STATIC_DIR }}/js/bootstrap.min.js"></script>
+
+    {% include 'includes/ga.html' %}
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

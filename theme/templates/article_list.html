@@ -1,0 +1,28 @@
+{#
+base template of pages which have lists of articles in them.  Provides
+pagination, h-feed wrapping, header placement
+
+Pages can override :
+- article_list_title: the header at the top of the list
+#}
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="h-feed">
+{% block article_list_title %}{% endblock %}
+
+{% for article in (articles_page.object_list if articles_page else articles) %}
+<article class="h-entry mb-4">
+    {% if article.category == "blog" %}
+    {% include 'blog_list_entry.html' %}
+    {% elif article.category == "notes" %}
+    {% include 'note_list_entry.html' %}
+    {% endif %}
+</article>
+{% endfor %}
+{% include 'includes/pagination.html' %}
+</section>
+
+{% endblock content %}
