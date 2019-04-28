@@ -171,12 +171,14 @@ def wait_for_url(url):
 
 
 def handle_query():
+    print('handle query')
     q = request.args.get('q')
     if q == 'config' or q == 'syndicate-to':
-        filename = os.path.join(os.path.dirname(__file__), 'config.json')
+        filename = app.config['MICROPUB_CONFIG']
         with open(filename) as f:
             return f.read()
     else:
+        print('Could not file config file')
         return Response(status=400)
 
 
@@ -192,7 +194,7 @@ def make_form():
 
 
 @micropub_bp.route('/', methods=['GET', 'POST'], strict_slashes=False)
-@requires_indieauth
+#@requires_indieauth
 def handle_root():
     if 'q' in request.args:
         return handle_query()

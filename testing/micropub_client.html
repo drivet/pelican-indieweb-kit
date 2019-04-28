@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Micropub client</title>
+</head>
+<body>
+    <div>Fetch config</div>
+    <form action="http://localhost:5000/micropub" method="GET">
+        <input type="hidden" name="q" value="config">
+        <input type="Submit">
+    </form>
+    <div>Post entry</div>
+    <form action="http://localhost:5000/micropub" method="POST">
+        <input type="hidden" name="h" value="entry">
+        <label>Name: </label>
+        <input type="text" name="name">
+        <label>Content: </label>
+        <input type="text" name="content">
+        <input type="Submit">
+    </form>
+</body>
+</html>

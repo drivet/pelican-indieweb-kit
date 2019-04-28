@@ -1,3 +1,4 @@
+MICROPUB_CONFIG = 'micropub_config_dev.json'
 WEBSITE_URL = 'https://desmondrivet.com'
 UPLOAD_FOLDER = 'upload_folder'
 WEBSITE_CONTENTS = 'https://api.github.com/repos/drivet/website-test/contents'
