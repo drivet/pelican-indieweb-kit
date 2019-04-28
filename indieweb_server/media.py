@@ -18,17 +18,14 @@ media_bp = Blueprint('media_bp', __name__)
 @media_bp.route('/', methods=['POST'], strict_slashes=False)
 @requires_indieauth
 def handle_media():
-    print('handling media...')
     # check if the post request has the file part
     if 'file' not in request.files:
-        print('no file part')
         return Response(response='no file part', status=400)
     file = request.files['file']
 
     # if user does not select file, browser also
     # submit an empty part without filename
     if file.filename == '':
-        print('no selected file')
         return Response(response='no selected file', status=400)
 
     if file and allowed_file(file.filename):
