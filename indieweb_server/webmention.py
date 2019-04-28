@@ -1,24 +1,19 @@
 import hashlib
 import os
-import base64
-import requests
-import json
-
-from flask import Flask, request, Response
-from ronkyuu import findMentions, discoverEndpoint
-import mf2py
 from urllib.parse import urlparse
+
+import mf2py
 import yaml
+from flask import request, Response, Blueprint
+from flask import current_app as app
+from ronkyuu import findMentions, discoverEndpoint
 
-app = Flask(__name__)
+from indieweb_server.util import commit_file
 
-WEBMENTION_FOLDER = '/content/webmentions'
-
-WEBSITE = 'website'
-WEBSITE_CONTENTS = 'https://api.github.com/repos/drivet/' + WEBSITE + '/contents'
+webmention_bp = Blueprint('webmention_bp', __name__)
 
 
-@app.route('/', methods=['POST'], strict_slashes=False)
+@webmention_bp.route('/', methods=['POST'], strict_slashes=False)
 def handle_root():
     source = request.form['source']
     target = request.form['target']
@@ -56,20 +51,10 @@ def extract_slug(target):
 
 def webmention_folder(target):
     slug = extract_slug(target)
-    return os.path.join(WEBMENTION_FOLDER, slug)
+    return os.path.join(app.config['WEBMENTION_FOLDER'], slug)
 
 
 def webmention_path(source, target):
     folder = webmention_folder(target)
     filename = hashlib.md5(source.encode()).hexdigest()
     return os.path.join(folder, filename + '.yml')
-
-
-def commit_file(path, content):
-    url = WEBSITE_CONTENTS + path
-    return requests.put(url, auth=(os.environ['USERNAME'], os.environ['PASSWORD']),
-                        data=json.dumps({'message': 'post to ' + path, 'content': b64(content)}))
-
-
-def b64(s):
-    return base64.b64encode(s.encode()).decode()

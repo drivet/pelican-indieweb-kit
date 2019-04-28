@@ -1,30 +1,19 @@
-import base64
 import datetime
 import io
-import json
 import os
 import re
 import time
-import uuid
 
 import requests
-from PIL import Image
-from flask import Flask, Response
+from flask import Response, Blueprint
 from flask import request
+from flask import current_app as app
 from flask_indieauth import requires_indieauth
 from werkzeug.datastructures import MultiDict
-from werkzeug.utils import secure_filename
 
-WEBSITE = 'website'
-WEBSITE_CONTENTS = 'https://api.github.com/repos/drivet/' + WEBSITE + '/contents'
-WEBSITE_URL = 'https://desmondrivet.com'
-UPLOAD_FOLDER = '/path/wwwroot/media'
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'PNG', 'JPG', 'JPEG', 'GIF'])
+from indieweb_server.util import commit_file
 
-IMAGE_SIZE = 1024
-
-app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+micropub_bp = Blueprint('micropub_bp', __name__)
 
 
 class Photo(object):
@@ -107,7 +96,7 @@ def extract_slug(entry):
 
 
 def extract_permalink(entry):
-    return WEBSITE_URL + entry.published_date.strftime('/%Y/%m/%d/') + extract_slug(entry)
+    return app.config['WEBSITE_URL'] + entry.published_date.strftime('/%Y/%m/%d/') + extract_slug(entry)
 
 
 def escape_commas(s):
@@ -161,16 +150,6 @@ def make_article(entry):
     return permalink, created
 
 
-def commit_file(path, content):
-    url = WEBSITE_CONTENTS + path
-    return requests.put(url, auth=(os.environ['USERNAME'], os.environ['PASSWORD']),
-                        data=json.dumps({'message': 'post to ' + path, 'content': b64(content)}))
-
-
-def b64(s):
-    return base64.b64encode(s.encode()).decode()
-
-
 def wait_for_url(url):
     timeout_secs = 15
     wait_secs = 0.1
@@ -201,12 +180,18 @@ def handle_query():
         return Response(status=400)
 
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+def make_form():
+    json_data = request.get_json()
+    if not json_data:
+        return request.form
+    result = MultiDict()
+    result['h'] = json_data['type'][0].split('-', 1)[1]
+    for key, value in json_data['properties'].items():
+        result.setlist(key, value)
+    return result
 
 
-@app.route('/', methods=['GET', 'POST'], strict_slashes=False)
+@micropub_bp.route('/', methods=['GET', 'POST'], strict_slashes=False)
 @requires_indieauth
 def handle_root():
     if 'q' in request.args:
@@ -234,59 +219,3 @@ def handle_root():
         return resp
     else:
         return Response(response='only h-entry supported', status=400)
-
-
-def make_form():
-    json_data = request.get_json()
-    if not json_data:
-        return request.form
-    result = MultiDict()
-    result['h'] = json_data['type'][0].split('-', 1)[1]
-    for key, value in json_data['properties'].items():
-        result.setlist(key, value)
-    return result
-
-
-@app.route('/media', methods=['POST'], strict_slashes=False)
-@requires_indieauth
-def handle_media():
-    print('handling media...')
-    # check if the post request has the file part
-    if 'file' not in request.files:
-        print('no file part')
-        return Response(response='no file part', status=400)
-    file = request.files['file']
-
-    # if user does not select file, browser also
-    # submit an empty part without filename
-    if file.filename == '':
-        print('no selected file')
-        return Response(response='no selected file', status=400)
-
-    if file and allowed_file(file.filename):
-        filename = create_filename(secure_filename(file.filename))
-        print('saving file: ' + filename)
-        abs_filename = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(abs_filename)
-        outfile = make_image(app.config['UPLOAD_FOLDER'], filename)
-        resp = Response(status=201)
-        location = WEBSITE_URL + '/media/' + outfile
-        resp.headers['Location'] = location
-        return resp
-
-
-def create_filename(filename):
-    base, ext = os.path.splitext(filename)
-    return str(uuid.uuid4()) + ext
-
-
-def make_image(folder, filename):
-    infile = os.path.join(folder, filename)
-    outfile = os.path.join(folder, '0_' + filename)
-    try:
-        im = Image.open(infile)
-        im.thumbnail((IMAGE_SIZE, IMAGE_SIZE), Image.ANTIALIAS)
-        im.save(outfile, "JPEG")
-        return '0_' + filename
-    except IOError:
-        print("cannot create thumbnail for '%s'" % infile)
