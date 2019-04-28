@@ -19,11 +19,18 @@ def handle_root():
     target = request.form['target']
 
     if source == target:
-        return Response(response='source same as target', status=400)
+        return Response(response='source URL is the same as target URL', status=400)
+
+    if not target.startswith(app.config['WEBSITE_URL']):
+        return Response(response='webmentions not supported on supplied target domain', status=400)
 
     if not discoverEndpoint(target)[1]:
-        return Response(response='target does not support webmentions', status=400)
+        return Response(response='target URL does not support webmentions', status=400)
 
+    return process_webmention(source, target)
+
+
+def process_webmention(source, target):
     # find mention in source
     result = findMentions(source, target)
 
