@@ -24,15 +24,20 @@
         {% endif %}
     </div>
     <div class="article-info-line d-flex">
+        {%  if article.webmentions %}
         <span class="webmention">
             <i class="far fa-heart"></i>
+            <span class="likes">{{article.webmentions.likes|count}}</span>
         </span>
         <span class="webmention">
             <i class="fas fa-retweet"></i>
+            <span class="reposts">{{article.webmentions.reposts|count}}</span>
         </span>
         <span class="webmention">
             <i class="far fa-comment"></i>
+            <span class="replies">{{article.webmentions.replies|count}}</span>
         </span>
+        {% endif %}
         <span class="mr-auto"></span>
 
         {% if article.hashtags %}  

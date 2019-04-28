@@ -142,21 +142,24 @@ def process_webmentions(generator):
         webmentions_path = os.path.join(generator.settings['PATH'],
                                         generator.settings['WEBMENTION_PATH'],
                                         article.slug)
+        if not os.path.isdir(webmentions_path):
+            continue
+
         for filename in os.listdir(webmentions_path):
-            webmention = load_webmention(filename)
+            webmention = load_webmention(os.path.join(webmentions_path, filename))
             if webmention:
                 attach_webmention(article, webmention)
 
 
-def attach_webmention(article, webmention):
-    comment = mf2util.interpret_comment(webmention, None, [])
+def attach_webmention(article, wm):
+    comment = mf2util.interpret_comment(wm['parsedSource'], wm['sourceUrl'], [wm['targetUrl']])
     comment_type = comment['comment_type'][0]
     if comment_type == 'like':
-        article.webmentions.likes = comment
+        article.webmentions.likes.append(comment)
     elif comment_type == 'repost':
-        article.webmentions.reposts = comment
+        article.webmentions.reposts.append(comment)
     elif comment_type == 'reply':
-        article.webmentions.replies = comment
+        article.webmentions.replies.append(comment)
     else:
         print('Unrecognized comment type: ' + comment_type)
 
@@ -172,8 +175,9 @@ def load_webmention(filename):
 
 def register():
     signals.article_generator_context.connect(fix_metadata)
-    signals.article_generator_context.connect(setup_webmentions)
     signals.article_generator_finalized.connect(find_articles_to_syndicate)
-    signals.article_generator_finalized.connect(process_webmentions)
     signals.finalized.connect(syndicate)
     signals.finalized.connect(save_syndication)
+
+    signals.article_generator_context.connect(setup_webmentions)
+    signals.article_generator_finalized.connect(process_webmentions)

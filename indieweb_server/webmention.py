@@ -41,7 +41,12 @@ def process_webmention(source, target):
         return Response(response='target not found in source', status=400)
 
     parsed = mf2py.Parser(url=source).to_dict()
-    r = commit_file(webmention_path(source, target), yaml.dump(parsed))
+    webmention = {
+        'sourceUrl': source,
+        'targetUrl': target,
+        'parsedSource': parsed
+    }
+    r = commit_file(webmention_path(source, target), yaml.dump(webmention))
     if r.status_code != 201:
         print('failed to post to github: ' + r.text)
         raise Exception('failed to post to github: ' + str(r))
