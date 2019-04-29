@@ -1,6 +1,6 @@
 <div class="article-info text-muted">
-    <div class="article-info-line d-flex">
-
+    {% if article.subcategories or article.tags %}
+    <div class="article-info-line d-flex taxonomy-line">
         {% if article.subcategories %}
         <span class="article-info-span">
             <span class="fa fa-folder"></span>
@@ -23,8 +23,9 @@
         </span>
         {% endif %}
     </div>
+    {% endif %}
     <div class="article-info-line d-flex">
-        {%  if article.webmentions %}
+        {% if article.webmentions %}
         <span class="webmention">
             <i class="far fa-heart"></i>
             <span class="likes">{{article.webmentions.likes|count}}</span>
