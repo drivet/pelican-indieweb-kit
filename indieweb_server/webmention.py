@@ -7,7 +7,8 @@ import yaml
 from flask import request, Response, Blueprint
 from flask import current_app as app
 from ronkyuu import findMentions, discoverEndpoint
-
+from redis import Redis
+from rq import Queue
 from indieweb_server.util import commit_file
 
 webmention_bp = Blueprint('webmention_bp', __name__)
@@ -27,18 +28,21 @@ def handle_root():
     if not discoverEndpoint(target)[1]:
         return Response(response='target URL does not support webmentions', status=400)
 
-    return process_webmention(source, target)
+    commit_url = app.config['WEBSITE_CONTENTS'] + webmention_path(source, target)
+    q = Queue(connection=Redis())
+    q.enqueue(process_webmention, commit_url, source, target)
+    return Response(status=202)
 
 
-def process_webmention(source, target):
+def process_webmention(commit_url, source, target):
     # find mention in source
     result = findMentions(source, target)
 
     if result['status'] != 200:
-        return Response(response='error fetching source', status=400)
+        raise Exception('error fetching source')
 
     if not result['refs']:
-        return Response(response='target not found in source', status=400)
+        raise Exception('target not found in source')
 
     parsed = mf2py.Parser(url=source).to_dict()
     webmention = {
@@ -46,11 +50,20 @@ def process_webmention(source, target):
         'targetUrl': target,
         'parsedSource': parsed
     }
-    r = commit_file(webmention_path(source, target), yaml.dump(webmention))
+    r = commit_file(commit_url, yaml.dump(webmention))
     if r.status_code != 201:
-        print('failed to post to github: ' + r.text)
-        raise Exception('failed to post to github: ' + str(r))
-    return Response(status=201)
+        raise Exception('failed to post to github: ' + str(r.status_code) + ', ' + r.text)
+
+
+def webmention_path(source, target):
+    folder = webmention_folder(target)
+    filename = hashlib.md5(source.encode()).hexdigest()
+    return os.path.join(folder, filename + '.yml')
+
+
+def webmention_folder(target):
+    slug = extract_slug(target)
+    return os.path.join(app.config['WEBMENTION_FOLDER'], slug)
 
 
 def extract_slug(target):
@@ -61,12 +74,3 @@ def extract_slug(target):
     return slug
 
 
-def webmention_folder(target):
-    slug = extract_slug(target)
-    return os.path.join(app.config['WEBMENTION_FOLDER'], slug)
-
-
-def webmention_path(source, target):
-    folder = webmention_folder(target)
-    filename = hashlib.md5(source.encode()).hexdigest()
-    return os.path.join(folder, filename + '.yml')

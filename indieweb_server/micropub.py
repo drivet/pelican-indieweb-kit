@@ -121,7 +121,7 @@ def make_note(entry):
 
         f.write('\n')
         f.write(entry.content)
-        r = commit_file('/content/notes/' + extract_slug(entry) + '.nd', f.getvalue())
+        r = commit_file(github_commit_url('/content/notes/' + extract_slug(entry) + '.nd'), f.getvalue())
         if r.status_code != 201:
             raise Exception('failed to post to github')
     permalink = extract_permalink(entry)
@@ -142,12 +142,16 @@ def make_article(entry):
 
         f.write('\n')
         f.write(entry.content)
-        r = commit_file('/content/blog/' + extract_slug(entry) + '.md', f.getvalue())
+        r = commit_file(github_commit_url('/content/blog/' + extract_slug(entry) + '.md'), f.getvalue())
         if r.status_code != 201:
             raise Exception('failed to post to github')
     permalink = extract_permalink(entry)
     created = wait_for_url(permalink)
     return permalink, created
+
+
+def github_commit_url(path):
+    return app.config['WEBSITE_CONTENTS'] + path
 
 
 def wait_for_url(url):
@@ -194,7 +198,7 @@ def make_form():
 
 
 @micropub_bp.route('/', methods=['GET', 'POST'], strict_slashes=False)
-#@requires_indieauth
+@requires_indieauth
 def handle_root():
     if 'q' in request.args:
         return handle_query()

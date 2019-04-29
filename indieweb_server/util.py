@@ -1,14 +1,13 @@
 import base64
 import json
-import requests
 import os
-from flask import current_app as app
+
+import requests
 
 
-def commit_file(path, content):
-    url = app.config['WEBSITE_CONTENTS'] + path
+def commit_file(url, content):
     return requests.put(url, auth=(os.environ['USERNAME'], os.environ['PASSWORD']),
-                        data=json.dumps({'message': 'post to ' + path, 'content': b64(content)}))
+                        data=json.dumps({'message': 'post to ' + url, 'content': b64(content)}))
 
 
 def b64(s):
