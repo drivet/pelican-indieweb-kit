@@ -41,17 +41,6 @@
         {% endif %}
         <span class="mr-auto"></span>
 
-        {% if article.hashtags %}  
-        <span class="article-info-span">
-            {% for tag in article.hashtags: %}
-            <a href="{{ TWITTER_HASHTAG.format(hashtag=tag) }}" class="p-category">
-                #{{tag}}
-            </a>
-            {% if not loop.last %},{% endif %}
-            {% endfor %}
-        </span>
-        {% endif %}
-
         {% if article.twitter_id %}
         <span class="article-info-span">
             <a href="{{ TWITTER_LINK.format(twitterid=article.twitter_id) }}">
