@@ -14,7 +14,7 @@
         &#183;
         <span class="article-info-span">
             <span class="fa fa-tag fa-flip-horizontal"></span>
-            {% for tag in article.tags: %}
+            {% for tag in article.tags %}
             <a href="{{ SITEURL }}/{{ tag.url }}" class="p-category">
                 {{tag}}
             </a>
@@ -25,20 +25,7 @@
     </div>
     {% endif %}
     <div class="article-info-line d-flex">
-        {% if article.webmentions %}
-        <span class="webmention">
-            <i class="far fa-heart"></i>
-            <span class="likes">{{article.webmentions.likes|count}}</span>
-        </span>
-        <span class="webmention">
-            <i class="fas fa-retweet"></i>
-            <span class="reposts">{{article.webmentions.reposts|count}}</span>
-        </span>
-        <span class="webmention">
-            <i class="far fa-comment"></i>
-            <span class="replies">{{article.webmentions.replies|count}}</span>
-        </span>
-        {% endif %}
+        {% include 'includes/webmentions.html' %}
         <span class="mr-auto"></span>
 
         {% if article.twitter_id %}

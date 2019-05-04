@@ -1,0 +1,72 @@
+{% set article_id =  article.url.replace("/", "-") %}
+{% if article.webmentions %}
+{% if article.webmentions.likes|count > 0 %}
+<a href="#" class="webmention" data-toggle="modal" data-target="#modalLikes-{{article_id}}">
+    <i class="far fa-heart"></i>
+    <span class="likes">{{ article.webmentions.likes|count }}</span>
+</a>
+<div class="modal fade" id="modalLikes-{{article_id}}" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Likes</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% for wm in article.webmentions.likes %}
+                <div class="like webmention-item d-flex align-items-center mb-2">
+                    <img src="{{wm.author.photo}}" class="img-fluid rounded mr-2"/>
+                    <a href="{{wm.author.url}}">{{wm.author.name}}</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<span class="webmention">
+    <i class="far fa-heart"></i>
+    <span class="likes">{{ article.webmentions.likes|count }}</span>
+</span>
+{% endif %}
+
+{% if article.webmentions.reposts|count > 0 %}
+<a href="#" class="webmention" data-toggle="modal" data-target="#modalReposts-{{article_id}}">
+    <i class="fas fa-retweet"></i>
+    <span class="reposts">{{ article.webmentions.reposts|count }}</span>
+</a>
+<div class="modal fade" id="modalReposts-{{article_id}}" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reposts</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% for wm in article.webmentions.reposts %}
+                <div class="repost webmention-item d-flex align-items-center mb-2">
+                    <img src="{{wm.author.photo}}" class="img-fluid rounded mr-2"/>
+                    <a href="{{wm.author.url}}">{{wm.author.name}}</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<span class="webmention">
+    <i class="fas fa-retweet"></i>
+    <span class="reposts">{{ article.webmentions.reposts|count }}</span>
+</span>
+{% endif %}
+
+<span class="webmention">
+    <i class="far fa-comment"></i>
+    <span class="replies">{{ article.webmentions.replies|count }}</span>
+</span>
+
+{% endif %}
