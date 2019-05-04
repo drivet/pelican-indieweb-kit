@@ -1,10 +1,24 @@
 {% if article.webmentions.replies|count > 0 %}
 <div class="reply-list pt-4">
-    {% for wm in article.webmentions.replies %}
+    {% for wm in article.webmentions.replies|sort(attribute='published', reverse = True) %}
     <div class="repost webmention-item d-flex align-items-center border-bottom mb-2 pb-4">
-        <img src="{{wm.author.photo}}" class="img-fluid rounded mr-2"/>
+        <img src="{{ wm.author.photo }}" class="img-fluid rounded mr-2"/>
         <div>
-            <div><a href="{{wm.author.url}}">{{wm.author.name}}</a></div>
+            <div class="article-info text-muted">
+                <div class="article-info-line">
+                    <time class="article-info-span" datetime="{{ wm.published.isoformat() }}">
+                        {{ wm.published.strftime('%d %b, %Y %-I:%M %p') }}
+                    </time>
+                    &#183;
+                    <span class="article-info-span">
+                        <a href="{{ wm.author.url }}">{{ wm.author.name }}</a>
+                    </span>
+                    &#183;
+                    <a class="u-url article-info-span" title="Permalink" href="{{wm.url}}">
+                        <span class="fa fa-link"></span>
+                    </a>
+                </div>
+            </div>
             <div>{{wm.content}}</div>
         </div>
     </div>
