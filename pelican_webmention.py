@@ -25,6 +25,7 @@ class Webmentions(object):
         self.likes = []
         self.replies = []
         self.reposts = []
+        self.leftovers = []
 
 
 def fix_metadata(generator, metadata):
@@ -162,6 +163,7 @@ def attach_webmention(article, wm):
         article.webmentions.replies.append(comment)
     else:
         print('Unrecognized comment type: ' + comment_type)
+        article.webmentions.leftovers.append(comment)
 
 
 def load_webmention(filename):
