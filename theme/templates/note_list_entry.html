@@ -11,6 +11,28 @@
             <header class="article-header">
                 {% include 'includes/article_info_head.html' %}
             </header>
+            {% if article.like_of %}
+            <div class="my-2 p-summary">
+                Liked:
+                <div class="mb-3 related-url">
+                    <a class="u-like-of" href="{{article.like_of}}">{{article.like_of}}</a>
+                </div>
+            </div>
+            {% elif article.repost_of %}
+            <div class="my-2 p-summary">
+                Reposted:
+                <div class="mb-3 related-url">
+                    <a class="u-repost-of" href="{{article.repost_of}}">{{article.repost_of}}</a>
+                </div>
+            </div>
+            {% elif article.in_reply_to %}
+            <div class="my-2 p-summary">
+                Replied to:
+                <div class="mb-3 related-url">
+                    <a class="u-in-reply-to" href="{{article.in_reply_to}}">{{article.in_reply_to}}</a>
+                </div>
+            </div>
+            {% endif %}
             <div class="my-2 entry-content e-content">
                 {{ article.content }}
                 {% for photo in photos %}

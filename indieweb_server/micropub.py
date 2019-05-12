@@ -1,13 +1,12 @@
 import datetime
 import io
-import os
 import re
 import time
 
 import requests
 from flask import Response, Blueprint
-from flask import request
 from flask import current_app as app
+from flask import request
 from flask_indieauth import requires_indieauth
 from werkzeug.datastructures import MultiDict
 
@@ -112,6 +111,15 @@ def make_note(entry):
 
         if entry.mp_syndicate_to:
             write_meta(f, 'mp_syndicate_to', ','.join(entry.mp_syndicate_to))
+
+        if entry.like_of:
+            write_meta(f, 'like_of', entry.like_of)
+
+        if entry.repost_of:
+            write_meta(f, 'repost_of', entry.repost_of)
+
+        if entry.in_reply_to:
+            write_meta(f, 'in_reply_to', entry.in_reply_to)
 
         if entry.photo:
             write_meta(f, 'photos', ','.join(map(lambda p: p.url, entry.photo)))
