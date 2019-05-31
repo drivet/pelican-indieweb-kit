@@ -75,9 +75,9 @@ def send_all_webmentions(p):
             # r = None
             if r and r.status_code == requests.codes.created:
                 results[target_url] = r.headers['Location']
-            elif r:
+            elif r is not None:
                 results[target_url] = r.status_code
-            else:
+            elif r is None:
                 url = urlparse(target_url)
                 excluded_domains.append(url.hostname)
 
@@ -98,7 +98,7 @@ def send_webmention(source_url, target_url):
     print('sending webmention from ' + source_url + " to " + target_url)
     r = sendWebmention(source_url, target_url)
 
-    if not r:
+    if r is None:
         print('Webmention failed due to lack of endpoint')
     elif not r.ok:
         print('Webmention failed with ' + str(r.status_code))
