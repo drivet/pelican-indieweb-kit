@@ -128,7 +128,8 @@ def make_note(entry):
                 write_meta(f, 'photos_alt', alt)
 
         f.write('\n')
-        f.write(entry.content)
+        if entry.content:
+            f.write(entry.content)
         r = commit_file(github_commit_url('/content/notes/' + extract_slug(entry) + '.nd'), f.getvalue())
         if r.status_code != 201:
             raise Exception('failed to post to github')
@@ -215,14 +216,14 @@ def handle_root():
 
     if 'h' not in request_data:
         return Response(status=400)
-    if 'content' not in request_data:
-        return Response(status=400)
 
     if request_data['h'] == 'entry':
         entry = Entry(request_data)
         if not entry.name:
             permalink, created = make_note(entry)
         else:
+            if not entry.content:
+                return Response(status=400)
             permalink, created = make_article(entry)
 
         if created:
