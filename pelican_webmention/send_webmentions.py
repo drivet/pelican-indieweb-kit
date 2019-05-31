@@ -82,7 +82,8 @@ def send_all_webmentions(p):
                 excluded_domains.append(url.hostname)
 
         if results:
-            set_cached_result(source_url, results)
+            url = urlparse(source_url)
+            set_cached_result(url.path, results)
 
         for excluded in excluded_domains:
             if not has_excluded_domain(excluded):
