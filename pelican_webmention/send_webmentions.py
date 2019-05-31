@@ -98,7 +98,9 @@ def send_webmention(source_url, target_url):
     print('sending webmention from ' + source_url + " to " + target_url)
     r = sendWebmention(source_url, target_url)
 
-    if not r.ok:
+    if not r:
+        print('Webmention failed due to lack of endpoint')
+    elif not r.ok:
         print('Webmention failed with ' + str(r.status_code))
         print('Error information ' + str(r.json()))
     return r
