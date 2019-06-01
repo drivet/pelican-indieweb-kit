@@ -30,7 +30,7 @@ class Entry(object):
         self.category = extract_value(request_data, 'category', True)
         self.in_reply_to = extract_value(request_data, 'in-reply-to')
         self.like_of = extract_value(request_data, 'like-of')
-        self.repost_of = extract_value(request_data, 'report-of')
+        self.repost_of = extract_value(request_data, 'repost-of')
         self.syndication = extract_value(request_data, 'syndication', True)
         self.mp_slug = extract_value(request_data, 'mp-slug')
         self.mp_syndicate_to = extract_value(request_data, 'mp-syndicate-to', True)
