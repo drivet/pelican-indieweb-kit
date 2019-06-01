@@ -70,13 +70,13 @@ def attach_bridgy_syndication(generator):
         if article.syndication:
             continue
 
-        if not has_cached_result(article.url):
+        if not has_cached_result('/' + article.url):
             continue
 
-        target_results = get_cached_result(article.url)
+        target_results = get_cached_result('/' + article.url)
 
         def is_syndicated_loc(v):
-            return find_match_list(v, generator.settings['BRIDGY_SYNDICATED_LOCATIONS'])
+            return find_match_list(str(v), generator.settings['BRIDGY_SYNDICATED_LOCATIONS']) != -1
 
         article.syndication = list(filter(is_syndicated_loc, target_results.values()))
 

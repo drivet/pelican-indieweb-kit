@@ -39,6 +39,7 @@
         </span>
         {% endif %}
 
+        {% if not article.like_of %}
         {% for wml in article.syndication %}
         {% if wml.startswith('https://twitter.com') %}
         <span class="article-info-span">
@@ -48,6 +49,7 @@
         </span>
         {% endif %}
         {% endfor %}
+        {% endif %}
     </div>
 </div>
 
