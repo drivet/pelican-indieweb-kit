@@ -1,8 +1,10 @@
 {% if article.webmentions.replies|count > 0 %}
 <div class="reply-list pt-4">
-    {% for wm in article.webmentions.replies|sort(attribute='published', reverse = True) %}
+    {% for wm in article.discussion|sort(attribute='published', reverse = True) %}
     <div class="repost webmention-item d-flex align-items-center border-bottom mb-2 pb-4">
+        {% if wm.author.photo %}
         <img src="{{ wm.author.photo }}" class="img-fluid rounded mr-2"/>
+        {% endif %}
         <div>
             <div class="article-info text-muted">
                 <div class="article-info-line">

@@ -6,13 +6,14 @@
         </time>
         &#183;
         <span class="article-info-span">
-            {% if article.author %}
-            <a class="p-author h-card"
-               href="{{ SITEURL }}">{{article.author}}</a>
-            {% else %}
-            <a class="p-author h-card"
-               href="{{ SITEURL }}">{{AUTHOR}}</a>
-            {% endif %}
+            <a class="p-author h-card" href="{{ SITEURL }}">
+                {% if article.author %}
+                {{ article.author }}
+                {% else %}
+                {{ AUTHOR }}
+                {% endif %}
+                <img src="{{ H_CARD_PHOTO }}" style="display: none"/>
+            </a>
         </span>
         &#183;
         <a class="u-url article-info-span" title="Permalink" href="{{ SITEURL }}/{{article.url}}">

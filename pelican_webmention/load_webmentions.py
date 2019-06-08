@@ -19,6 +19,7 @@ class Webmentions(object):
 
 def setup_webmentions(generator, metadata):
     metadata['webmentions'] = Webmentions()
+    metadata['discussion'] = []
 
 
 def process_webmentions(generator):
@@ -38,7 +39,7 @@ def process_webmentions(generator):
             if webmention:
                 attach_webmention(article, webmention)
 
-    link_webmentions(generator)
+    make_discussions(generator)
 
 
 def attach_webmention(article, wm):
@@ -61,7 +62,38 @@ def attach_webmention(article, wm):
         article.webmentions.unclassified.append(comment)
 
 
-# go through every article/webmention and link it to the one it's related to
+def make_discussions(generator):
+    link_webmentions(generator)
+    for article in list(generator.articles):
+        article.discussion = get_discussion(article.webmentions.replies, generator)
+
+
+def get_discussion(replies, generator):
+    siteurl = generator.settings['SITEURL']
+    settings_author = generator.settings['AUTHOR']
+    photo_url = generator.settings['H_CARD_PHOTO']
+    discussion = []
+    for reply in replies:
+        if isinstance(reply, dict):
+            discussion.append(reply)
+            if 'replies' in reply:
+                discussion.extend(get_discussion(reply['replies'], generator))
+        else:
+            discussion.append({
+                'published': reply.date,
+                'url': siteurl + '/' + reply.url,
+                'author': {
+                    'url': siteurl,
+                    'name': reply.author or settings_author,
+                    'photo': photo_url
+                },
+                'content': reply.content
+            })
+            if reply.webmentions.replies:
+                discussion.extend(get_discussion(reply.webmentions.replies, generator))
+    return discussion
+
+
 def link_webmentions(generator):
     for article in list(generator.articles):
         attach_article_to_parent(article)
@@ -80,6 +112,8 @@ def attach_webmention_to_parent(webmention):
                 parent.replies.append(webmention)
             elif in_reply_to in all_replies:
                 parent = all_replies[in_reply_to]
+                if 'replies' not in parent:
+                    parent['replies'] = []
                 parent['replies'].append(webmention)
 
 
@@ -92,5 +126,6 @@ def attach_article_to_parent(article):
             parent.replies.append(article)
         elif article.in_reply_to in all_replies:
             parent = all_replies[article.in_reply_to]
+            if 'replies' not in parent:
+                parent['replies'] = []
             parent['replies'].append(article)
-
