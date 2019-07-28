@@ -13,24 +13,15 @@
             </header>
             {% if article.like_of %}
             <div class="my-2">
-                Liked:
-                <div class="mb-3 related-url">
-                    <a class="u-like-of" href="{{article.like_of}}">{{article.like_of}}</a>
-                </div>
+                Liked <a class="u-like-of" href="{{article.like_of}}">a post</a>.
             </div>
             {% elif article.repost_of %}
             <div class="my-2">
-                Reposted:
-                <div class="mb-3 related-url">
-                    <a class="u-repost-of" href="{{article.repost_of}}">{{article.repost_of}}</a>
-                </div>
+                Reposted <a class="u-repost-of" href="{{article.repost_of}}">a post</a>.
             </div>
             {% elif article.in_reply_to %}
             <div class="my-2">
-                Replied to:
-                <div class="mb-3 related-url">
-                    <a class="u-in-reply-to" href="{{article.in_reply_to}}">{{article.in_reply_to}}</a>
-                </div>
+                Replied to <a class="u-in-reply-to" href="{{article.in_reply_to}}">a post</a>.
             </div>
             {% endif %}
             <div class="my-2 entry-content e-content">

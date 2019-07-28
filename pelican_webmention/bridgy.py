@@ -1,10 +1,12 @@
 import re
 
 from pelican_webmention.cache import has_cached_result, get_cached_result
+from parse import *
 
 """
-This plugin looks through each article and decides if it needs to be syndicated via Bridgy.
-If it decides yes then it adds an empty link to the article content
+This plugin looks through each article and decides if it needs to be
+syndicated via Bridgy.  If it decides yes then it adds an empty link to the
+article content
 """
 
 
@@ -27,15 +29,19 @@ def fix_bridgy_metadata(generator, metadata):
 def bridgify_content(instance):
     publish_content = []
 
-    # mp_syndicate_to is handled via webmentions if we use bridgy, but in general it doesn't have to be
+    # mp_syndicate_to is handled via webmentions if we use bridgy, but in
+    # general it doesn't have to be
     for target_url in instance.metadata['mp_syndicate_to']:
-        save_match(target_url, instance.settings, 'BRIDGY_MP_SYNDICATE_TO_MATCH', publish_content)
+        save_match(target_url, instance.settings,
+                   'BRIDGY_MP_SYNDICATE_TO_MATCH', publish_content)
 
     for header in instance.settings['WEBMENTIONS_CONTENT_HEADERS']:
-        save_match(instance.metadata[header], instance.settings, 'BRIDGY_' + header.upper() + '_MATCH', publish_content)
+        save_match(instance.metadata[header], instance.settings,
+                   'BRIDGY_' + header.upper() + '_MATCH', publish_content)
 
     if publish_content:
-        instance._content += '\n' + '\n'.join(map(make_anchor, publish_content))
+        instance._content += '\n' + '\n'.join(map(make_anchor,
+                                                  publish_content))
 
 
 def make_anchor(url):
@@ -60,25 +66,31 @@ def find_match_dict(url, d):
 
 def attach_bridgy_syndication(generator):
     """
-    Attach a syndication value to the article metadata (if there isn't one) using the
-    webmention cache file.
+    Attach a syndication value to the article metadata (if there isn't one)
+    using the webmention cache file.
 
-    Used strictly for templates - the cache is used directly to figure out if we should
-    skip webmentions.
+    Used strictly for templates - the cache is used directly to figure out
+    if we should skip webmentions.
     """
     for article in list(generator.articles):
-        if article.syndication:
-            continue
+        if not article.syndication:
+            if not has_cached_result('/' + article.url):
+                continue
 
-        if not has_cached_result('/' + article.url):
-            continue
+            target_results = get_cached_result('/' + article.url)
 
-        target_results = get_cached_result('/' + article.url)
+            def is_syndicated_loc(v):
+                return find_match_list(
+                    str(v),
+                    generator.settings['BRIDGY_SYNDICATED_LOCATIONS']) != -1
 
-        def is_syndicated_loc(v):
-            return find_match_list(str(v), generator.settings['BRIDGY_SYNDICATED_LOCATIONS']) != -1
+            article.syndication = list(
+                filter(is_syndicated_loc, target_results.values()))
 
-        article.syndication = list(filter(is_syndicated_loc, target_results.values()))
+        for s in article.syndication:
+            r = parse(generator.settings['TWITTER_LINK'], s)
+            if r and 'twitterid' in r:
+                article.syndication_twitter_id = r['twitterid']
 
 
 def find_match_list(url, items):

@@ -195,6 +195,14 @@
     <script src="{{ SITEURL }}/{{ THEME_STATIC_DIR }}/js/bootstrap.bundle.min.js"></script>
     <script src="{{ SITEURL }}/{{ THEME_STATIC_DIR }}/js/bootstrap.min.js"></script>
 
+    <!-- Needed for people who have indie config enabled -->
+    <script src="{{ SITEURL }}/{{ THEME_STATIC_DIR }}/js/indieconfig.js"></script>
+    <script src="{{ SITEURL }}/{{ THEME_STATIC_DIR }}/js/webaction.js"></script>
+
+    {% if TWITTER_LINK %}
+    <script type="text/javascript" async src="https://platform.twitter.com/widgets.js"></script>
+    {% endif %}
+
     {% include 'includes/ga.html' %}
 
     {% block scripts %}{% endblock %}

@@ -1,9 +1,13 @@
 from pelican import signals
 
-from pelican_webmention.bridgy import attach_bridgy_syndication, bridgify_content, fix_bridgy_metadata
-from pelican_webmention.cache import initialize_webmention_cache, save_webmention_cache, dump_webmention_cache
-from pelican_webmention.send_webmentions import find_articles_to_webmention, send_all_webmentions
-from pelican_webmention.load_webmentions import setup_webmentions, process_webmentions
+from pelican_webmention.bridgy import attach_bridgy_syndication,\
+    bridgify_content, fix_bridgy_metadata
+from pelican_webmention.cache import initialize_webmention_cache,\
+    dump_webmention_cache
+from pelican_webmention.send_webmentions \
+    import find_articles_to_webmention, send_all_webmentions
+from pelican_webmention.load_webmentions import setup_webmentions,\
+    process_webmentions
 
 
 def register():
@@ -26,5 +30,5 @@ def register():
 
     # pelican has finished writing and is about to close down
     signals.finalized.connect(send_all_webmentions)
-    signals.finalized.connect(save_webmention_cache)
-    # signals.finalized.connect(dump_webmention_cache)
+    #    signals.finalized.connect(save_webmention_cache)
+    signals.finalized.connect(dump_webmention_cache)

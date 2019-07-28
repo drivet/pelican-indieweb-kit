@@ -24,32 +24,15 @@
         {% endif %}
     </div>
     {% endif %}
-    <div class="article-info-line d-flex">
-        {# Like posts do not have likes or reposts or replies  #}
-        {% if not article.like_of %}
+
+    {# Like posts do not have likes or reposts or replies  #}
+    {% if not article.like_of %}
+    <div class="article-info-line d-flex mt-3">
         {% include 'includes/webmentions.html' %}
-        {% endif %}
-        <span class="mr-auto"></span>
-
-        {% if article.twitter_id %}
-        <span class="article-info-span">
-            <a href="{{ TWITTER_LINK.format(twitterid=article.twitter_id) }}">
-                <i class="fab fa-twitter"></i>
-            </a>
-        </span>
-        {% endif %}
-
-        {% if not article.like_of %}
-        {% for wml in article.syndication %}
-        {% if wml.startswith('https://twitter.com') %}
-        <span class="article-info-span">
-            <a class="u-syndication" href="{{ wml }}">
-                <i class="fab fa-twitter"></i>
-            </a>
-        </span>
-        {% endif %}
-        {% endfor %}
-        {% endif %}
     </div>
+    <div class="article-info-line d-flex mt-2">
+        {% include 'includes/twitter.html' %}
+        {% include 'includes/webactions.html' %}
+    </div>
+    {% endif %}
 </div>
-

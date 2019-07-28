@@ -1,0 +1,16 @@
+
+<indie-action do="like" with="{{ article.url }}">
+    <a href="{{ TWITTER_INTENT_LIKE.format(twitterid=article.syndication_twitter_id) }}">
+        <i class="far fa-heart"></i>Like
+    </a>
+</indie-action>
+<indie-action do="repost" with="{{ article.url }}">
+    <a href="{{ TWITTER_INTENT_RETWEET.format(twitterid=article.syndication_twitter_id) }}">
+        <i class="fas fa-retweet"></i>Repost
+    </a>
+</indie-action>
+<indie-action do="reply" with="{{ article.url }}">
+    <a target="_blank" href="{{ TWITTER_INTENT_REPLY.format(twitterid=article.syndication_twitter_id) }}">
+        <i class="far fa-comment"></i>Reply
+    </a>
+</indie-action>
