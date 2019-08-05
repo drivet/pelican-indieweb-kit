@@ -1,7 +1,8 @@
 import datetime
 import io
 import re
-import time
+import os
+import json
 
 import requests
 from flask import Response, Blueprint
@@ -9,8 +10,6 @@ from flask import current_app as app
 from flask import request
 from flask_indieauth import requires_indieauth
 from werkzeug.datastructures import MultiDict
-
-from indieweb_server.util import commit_file
 
 micropub_bp = Blueprint('micropub_bp', __name__)
 
@@ -134,8 +133,7 @@ def make_note(entry):
         if r.status_code != 201:
             raise Exception('failed to post to github')
     permalink = extract_permalink(entry)
-    created = wait_for_url(permalink)
-    return permalink, created
+    return permalink, False
 
 
 def make_article(entry):
@@ -155,32 +153,11 @@ def make_article(entry):
         if r.status_code != 201:
             raise Exception('failed to post to github')
     permalink = extract_permalink(entry)
-    created = wait_for_url(permalink)
-    return permalink, created
+    return permalink, False
 
 
 def github_commit_url(path):
     return app.config['WEBSITE_CONTENTS'] + path
-
-
-def wait_for_url(url):
-    timeout_secs = 15
-    wait_secs = 0.1
-    started = time.time()
-
-    done = False
-    found = False
-    while not done:
-        r = requests.head(url)
-        if r.status_code == 200:
-            done = True
-            found = True
-        elif (time.time() - started) >= timeout_secs:
-            done = True
-            found = False
-        else:
-            time.sleep(wait_secs)
-    return found
 
 
 def handle_query():
@@ -234,3 +211,13 @@ def handle_root():
         return resp
     else:
         return Response(response='only h-entry supported', status=400)
+
+
+def b64(s):
+    return base64.b64encode(s.encode()).decode()
+
+
+def commit_file(url, content):
+    return requests.put(url, auth=(os.environ['USERNAME'],
+                                   os.environ['PASSWORD']),
+                        data=json.dumps({'message': 'post to ' + url, 'content': b64(content)}))
