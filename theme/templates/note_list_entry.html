@@ -15,21 +15,21 @@
             <div class="my-2">
                 Liked:
                 <div class="mb-3 related-url">
-                    <a class="u-like-of" href="{{article.like_of}}">{{article.like_of}}</a>
+                    <a class="u-like-of" href="{{article.like_of[0]}}">{{article.like_of[0]}}</a>
                 </div>
             </div>
             {% elif article.repost_of %}
             <div class="my-2">
                 Reposted:
                 <div class="mb-3 related-url">
-                    <a class="u-repost-of" href="{{article.repost_of}}">{{article.repost_of}}</a>
+                    <a class="u-repost-of" href="{{article.repost_of[0]}}">{{article.repost_of[0]}}</a>
                 </div>
             </div>
             {% elif article.in_reply_to %}
             <div class="my-2">
                 Replied to:
                 <div class="mb-3 related-url">
-                    <a class="u-in-reply-to" href="{{article.in_reply_to}}">{{article.in_reply_to}}</a>
+                    <a class="u-in-reply-to" href="{{article.in_reply_to[0]}}">{{article.in_reply_to[0]}}</a>
                 </div>
             </div>
             {% endif %}
