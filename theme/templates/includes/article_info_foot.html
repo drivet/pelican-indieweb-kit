@@ -1,17 +1,6 @@
 <div class="article-info text-muted">
-    {% if article.subcategories or article.tags %}
+    {% if article.tags %}
     <div class="article-info-line d-flex taxonomy-line">
-        {% if article.subcategories %}
-        <span class="article-info-span">
-            <span class="fa fa-folder"></span>
-            <a href="{{ SITEURL }}/{{article.subcategories[0].url}}" class="p-category">
-                {{article.subcategories[0].shortname}}
-            </a>
-        </span>
-        {% endif %}
-
-        {% if article.tags %}
-        &#183;
         <span class="article-info-span">
             <span class="fa fa-tag fa-flip-horizontal"></span>
             {% for tag in article.tags %}
@@ -21,7 +10,6 @@
             {% if not loop.last %},{% endif %}
             {% endfor %}
         </span>
-        {% endif %}
     </div>
     {% endif %}
     <div class="article-info-line d-flex">

@@ -14,12 +14,7 @@
 {% block article_list_title %}
 <header class="d-flex mb-4">
     <h1 class="title mr-auto">{{ BLOGNAME }}</h1>
-    {% if CATEGORIES_SAVE_AS %}
-    <a class="align-self-center ml-2" title="Categories"
-       href="{{ SITEURL }}/{{ CATEGORIES_URL }}"> 
-        <span class="fa fa-folder mr-1"></span></a>
-    {% endif %}
-
+  
     {% if TAGS_SAVE_AS %}
     <a class="align-self-center ml-2" title="Tags"
        href="{{ SITEURL }}/{{ TAGS_URL }}"> 
