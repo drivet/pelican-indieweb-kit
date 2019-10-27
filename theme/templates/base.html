@@ -116,6 +116,8 @@
     {% endblock %}
 
     <link rel="feed" href="{{ SITEURL }}/{{ INDEX_URL }}" type="text/html"/>
+    
+    {% include 'includes/twitter.html' %}
 </head>
 <body>
     <nav class="navbar-main navbar navbar-expand-lg navbar-light bg-white fixed-top" role="navigation">
@@ -194,9 +196,8 @@
     <script src="{{ SITEURL }}/{{ THEME_STATIC_DIR }}/js/jquery.min.js"></script>
     <script src="{{ SITEURL }}/{{ THEME_STATIC_DIR }}/js/bootstrap.bundle.min.js"></script>
     <script src="{{ SITEURL }}/{{ THEME_STATIC_DIR }}/js/bootstrap.min.js"></script>
-
+  
     {% include 'includes/ga.html' %}
-
     {% block scripts %}{% endblock %}
 </body>
 </html>

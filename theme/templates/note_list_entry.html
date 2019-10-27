@@ -11,28 +11,47 @@
             <header class="article-header">
                 {% include 'includes/article_info_head.html' %}
             </header>
-            {% if article.like_of %}
+            
+            {% for like in article.like_of %}
             <div class="my-2">
                 Liked:
                 <div class="mb-3 related-url">
-                    <a class="u-like-of" href="{{article.like_of[0]}}">{{article.like_of[0]}}</a>
+                    {% if like.startswith('https://twitter.com') %}
+                    <script>
+                        twttr.ready(function (twttr) {
+                            twttr.widgets.createTweet('511181794914627584',
+                                         document.getElementById('{{like}}'),{
+                                        align: 'left'
+                                    }).then(function (el) {
+                                 console.log("Tweet displayed.")
+                          })});
+                    </script>
+                    <div id='{{like}}'></div>
+                    {% else %}
+                    <a class="u-like-of" href="{{like}}">{{like}}</a>
+                    {% endif %}
                 </div>
             </div>
-            {% elif article.repost_of %}
+            {% endfor %}
+            
+            {% for repost in article.repost_of %}
             <div class="my-2">
                 Reposted:
                 <div class="mb-3 related-url">
-                    <a class="u-repost-of" href="{{article.repost_of[0]}}">{{article.repost_of[0]}}</a>
+                    <a class="u-repost-of" href="{{repost}}">{{repost}}</a>
                 </div>
             </div>
-            {% elif article.in_reply_to %}
+            {% endfor %}
+            
+            {% for reply in article.in_reply_to %}
             <div class="my-2">
                 Replied to:
                 <div class="mb-3 related-url">
-                    <a class="u-in-reply-to" href="{{article.in_reply_to[0]}}">{{article.in_reply_to[0]}}</a>
+                    <a class="u-in-reply-to" href="{{reply}}">{{reply}}</a>
                 </div>
             </div>
-            {% endif %}
+            {% endfor %}
+            
             <div class="my-2 entry-content e-content">
                 {{ article.content }}
                 {% for photo in photos %}
