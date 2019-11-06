@@ -58,3 +58,11 @@ a {
     /* background-color: #fffee5 !important; */
    background-color: #f7f7f7 !important;
 }
+
+.rich-preview-wrapper {
+    text-align: center
+}
+
+.rich-preview {
+    display: inline-block;
+}

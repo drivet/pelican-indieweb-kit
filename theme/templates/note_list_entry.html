@@ -1,10 +1,3 @@
-{% if article.photos %}
-{% set photos = article.photos.split(',') %}
-{% endif %}
-{% if article.photos_alt %}
-{% set photos_alt = article.photos_alt.split('(?<!x),') %}
-{% endif %}
-
 <div class="card">
     <div class="card-body">
         <div class="card-text">
@@ -14,55 +7,53 @@
             
             {% for like in article.like_of %}
             <div class="my-2">
-                Liked:
-                <div class="mb-3 related-url">
-                    {% if like.startswith('https://twitter.com') %}
-                    <script>
-                        twttr.ready(function (twttr) {
-                            twttr.widgets.createTweet('511181794914627584',
-                                         document.getElementById('{{like}}'),{
-                                        align: 'left'
-                                    }).then(function (el) {
-                                 console.log("Tweet displayed.")
-                          })});
-                    </script>
-                    <div id='{{like}}'></div>
-                    {% else %}
-                    <a class="u-like-of" href="{{like}}">{{like}}</a>
-                    {% endif %}
-                </div>
+                Liked a <a class="u-like-of" href="{{like}}">post</a>
             </div>
             {% endfor %}
             
             {% for repost in article.repost_of %}
             <div class="my-2">
-                Reposted:
-                <div class="mb-3 related-url">
-                    <a class="u-repost-of" href="{{repost}}">{{repost}}</a>
-                </div>
+                Reposted a <a class="u-repost-of" href="{{repost}}">post</a>
             </div>
             {% endfor %}
             
             {% for reply in article.in_reply_to %}
             <div class="my-2">
-                Replied to:
-                <div class="mb-3 related-url">
-                    <a class="u-in-reply-to" href="{{reply}}">{{reply}}</a>
-                </div>
+                Replied to a <a class="u-in-reply-to" href="{{reply}}">post</a>
             </div>
             {% endfor %}
             
             <div class="my-2 entry-content e-content">
                 {{ article.content }}
-                {% for photo in photos %}
-                {% if photos_alt %}
-                <img src="{{photo}}" alt="{{ photos_alt[loop.index0] | replace('\,', ',') }}"
+                {% for photo in article.photo %}
+                {% if photo.alt %}
+                <img src="{{photo.value}}" alt="{{ photo.alt | replace('\,', ',') }}"
                      class="u-photo embedded-photo"/>
                 {% else %}
-                <img src="{{photo}}" class="u-photo embedded-photo"/>
+                <img src="{{photo.value}}" class="u-photo embedded-photo"/>
                 {% endif %}
                 {% endfor %}
             </div>
+            {% if article.preview %}
+            <div class="preview">
+            {% if 'html' in article.preview %}
+            <div class="rich-preview-wrapper">
+                <div class="rich-preview">{{ article.preview.html|safe }}</div>   
+            </div>
+            {% else %}
+            <div class="card-preview card">
+               <a href="{{article.preview.url}}">
+                   <img class="card-img-top"
+                        src="{{article.preview.image}}">
+               </a>
+               <div class="card-body">
+                  <h5 class="card-title">{{article.preview.title}}</h5>
+                  <p class="card-text">{{article.preview.description}}</p>
+               </div>
+            </div>
+            {% endif %}
+            </div>
+            {% endif %}
             {% include 'includes/article_info_foot.html' %}
         </div>
     </div>

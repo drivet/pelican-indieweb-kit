@@ -71,7 +71,7 @@
     <link href="{{ SITEURL }}/{{ CUSTOM_CSS }}" rel="stylesheet">
     {% endif %}
  
-    <link href="https://fonts.googleapis.com/css?family=Josefin+Slab|Lato|Old+Standard+TT|Open+Sans|PT+Sans|PT+Serif|Roboto|Source+Sans+Pro"
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Slab|Lato|Old+Standard+TT|Open+Sans|PT+Sans|PT+Serif|Roboto|Source+Sans+Pro|Oxygen"
           rel="stylesheet">
 
     <!-- I guess it makes sense that RSS/Atom feeds should be on every page? -->
@@ -116,8 +116,7 @@
     {% endblock %}
 
     <link rel="feed" href="{{ SITEURL }}/{{ INDEX_URL }}" type="text/html"/>
-    
-    {% include 'includes/twitter.html' %}
+    <script sync src="https://platform.twitter.com/widgets.js"></script>
 </head>
 <body>
     <nav class="navbar-main navbar navbar-expand-lg navbar-light bg-white fixed-top" role="navigation">
