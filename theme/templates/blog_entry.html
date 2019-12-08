@@ -3,6 +3,11 @@
 </header>
 <div class="mt-2">
     <h1 class="p-name title">{{ article.title }}</h1>
+    {% if article.blurb %}
+    <div class="p-summary" style="display: none">
+        {{article.blurb}}
+    </div>
+    {% endif %}
     <div class="entry-content e-content">
         {{ article.content }}
     </div>
