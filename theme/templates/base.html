@@ -112,6 +112,10 @@
     <link rel="micropub" href="{{ MICROPUB_ENDPOINT }}"/>
     {% endif %}
 
+    {% if MICROSUB_ENDPOINT %}
+    <link rel="microsub" href="{{ MICROSUB_ENDPOINT }}"/>
+    {% endif %}
+      
     {% block link %}
     {% endblock %}
 
