@@ -1,0 +1,26 @@
+{% if article.preview %}
+{% set preview = article.preview %}
+{% if 'image' in preview %}
+    {% set width = preview['image:width'] | int %}
+    {% set height = preview['image:height'] | int %}
+    {% if width > 300 %}
+        {% set image_status = 'large' %}
+    {% else %}
+        {% set image_status = 'small' %}
+    {% endif %}
+{% else %}
+    {% set image_status = 'none' %}
+{% endif %}
+
+<div class="preview">
+{% if 'html' in preview %}
+<div class="rich-preview-wrapper">
+    <div class="rich-preview">{{ preview.html|safe }}</div>   
+</div>
+{% elif 'mf2' in preview and preview.type != 'mf2:article' and image_status == 'none' %}
+{% include 'includes/preview_quote.html' %}
+{% else %}
+{% include 'includes/preview_card.html' %}
+{% endif %}
+</div>
+{% endif %}

@@ -66,3 +66,14 @@ a {
 .rich-preview {
     display: inline-block;
 }
+
+blockquote cite {
+    font-style: normal;
+    margin-bottom: 0.5em;
+    display: block;
+}
+
+blockquote .preview-image {
+    width: 100%;
+    height: auto;
+}

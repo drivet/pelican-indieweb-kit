@@ -1,0 +1,8 @@
+<div class="card-body">
+    {% if 'title' in preview %}
+    <h5 class="card-title">{{preview.title}}</h5>
+    {% endif %}
+    {% if 'description' in preview %}
+    <p class="card-text">{{preview.description}}</p>
+    {% endif %}
+</div>

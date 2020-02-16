@@ -1,0 +1,21 @@
+<div class="card-preview card">    
+    {% if image_status == 'large' %}
+        <a href="{{preview.url}}">
+            <img class="card-img-top" src="{{preview.image}}">
+        </a>
+        {% include 'includes/preview_card_body.html' %}
+    {% elif image_status == 'small' %}
+        <div class="row no-gutters">
+            <div class="col-md-3">
+                <img src="{{preview.image}}"
+                     width="175" height="175">
+            </div>
+            <div class="col-md-9">
+                {% include 'includes/preview_card_body.html' %}
+            </div>
+        </div>
+
+    {% else %}
+        {% include 'includes/preview_card_body.html' %}
+    {% endif %}
+</div>
