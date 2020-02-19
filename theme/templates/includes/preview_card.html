@@ -1,4 +1,25 @@
-<div class="card-preview card">    
+<cite class="article-info text-muted">
+     <div class="article-info-line">
+         {% if 'author' in preview %}
+         <span class="article-info-span">
+             <a class="p-author h-card" href="{{ preview.author.url }}">
+                 <img src="{{ preview.author.photo }}" width="24px" height="24px"/>
+                {{ preview.author.name }}
+             </a>
+         </span>
+         &#183;
+         {% endif %}
+         {% if 'published_locale' in preview %}
+         <span class="article-info-span">
+             {{ preview.published_locale }}
+         </span>
+         {% endif %}
+        
+     </div>
+ </cite>
+
+<div class="card-preview card">
+  
     {% if image_status == 'large' %}
         <a href="{{preview.url}}">
             <img class="card-img-top" src="{{preview.image}}">

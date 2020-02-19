@@ -1,23 +1,22 @@
-<div class="article-info text-muted">
-    <div class="article-info-line">
-        <time class="article-info-span"
-              datetime="{{ article.date.isoformat() }}">
+<div class="article-info text-muted d-flex align-items-center">
+    <img class="mr-2" src="{{ H_CARD_PHOTO }}" width="36px" height="36px"/>
+    <div class="d-flex flex-column mr-2">
+        <a class="p-author h-card" href="{{ SITEURL }}">
+            {% if article.author %}
+            {{ article.author }}
+            {% else %}
+            {{ AUTHOR }}
+            {% endif %}
+        </a>
+        <time datetime="{{ article.date.isoformat() }}">
             {{ article.locale_date }}
         </time>
-        &#183;
-        <span class="article-info-span">
-            <a class="p-author h-card" href="{{ SITEURL }}">
-                {% if article.author %}
-                {{ article.author }}
-                {% else %}
-                {{ AUTHOR }}
-                {% endif %}
-                <img src="{{ H_CARD_PHOTO }}" style="display: none"/>
-            </a>
-        </span>
-        &#183;
-        <a class="u-url article-info-span" title="Permalink" href="{{ SITEURL }}/{{article.url}}">
-            <span class="fa fa-link"></span>
-        </a>
     </div>
+    <span class="mr-2">
+        &#183;
+    </span>
+    <a class="u-url" title="Permalink" href="{{ SITEURL }}/{{article.url}}">
+       <span class="fa fa-bookmark"></span>
+    </a>
+    
 </div>

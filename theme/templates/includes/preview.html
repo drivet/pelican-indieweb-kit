@@ -12,6 +12,7 @@
     {% set image_status = 'none' %}
 {% endif %}
 
+{% if preview %}
 <div class="preview">
 {% if 'html' in preview %}
 <div class="rich-preview-wrapper">
@@ -23,4 +24,5 @@
 {% include 'includes/preview_card.html' %}
 {% endif %}
 </div>
+{% endif %}
 {% endif %}
