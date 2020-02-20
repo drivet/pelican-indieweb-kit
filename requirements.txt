@@ -29,4 +29,4 @@ soupsieve==1.9.1
 Unidecode==1.0.23
 urllib3==1.24.2
 webencodings==0.5.1
-Werkzeug==0.15.2
+Werkzeug==0.15.3
