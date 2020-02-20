@@ -6,7 +6,7 @@
             </header>
             
             {% for like in article.like_of %}
-            <div class="my-3">
+            <div class="my-4">
                 <i class="far fa-thumbs-up mr-1"></i>
                 <a class="u-like-of" href="{{like}}">{{like}}</a>
                 <!--
@@ -16,8 +16,8 @@
             {% endfor %}
             
             {% for repost in article.repost_of %}
-            <div class="my-3">
-                <i class="far fa-retweet mr-1"></i>
+            <div class="my-4">
+                <i class="fa fa-retweet mr-1"></i>
                 <a class="u-repost-of" href="{{repost}}">{{repost}}</a>
                 <!--
                 Reposted a <a class="u-repost-of" href="{{repost}}">post</a>
@@ -26,7 +26,7 @@
             {% endfor %}
             
             {% for reply in article.in_reply_to %}
-            <div class="my-3">
+            <div class="my-4">
                 <i class="fa fa-reply mr-1"></i>
                 <a class="u-in-reply-to" href="{{reply}}">{{reply}}</a>
                 <!--
@@ -35,7 +35,7 @@
             </div>
             {% endfor %}
             
-            <div class="my-3 entry-content e-content">
+            <div class="my-4 entry-content e-content">
                 {{ article.content }}
                 {% for photo in article.photo %}
                 {% if photo.alt %}

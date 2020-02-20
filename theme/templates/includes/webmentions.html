@@ -1,5 +1,44 @@
 {% set article_id =  article.url.replace("/", "-") %}
 {% if article.webmentions %}
+{% if article.webmentions.bookmarks|count > 0 %}
+<a href="#" class="webmention" data-toggle="modal" data-target="#modalBookmarks-{{article_id}}">
+    <i class="fa fa-bookmark"></i>
+    <span class="bookmarks">{{ article.webmentions.bookmarks|count }}</span>
+</a>
+<div class="modal fade" id="modalBookmarks-{{article_id}}" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mb-0">Bookmarks</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% for wm in article.webmentions.bookmarks %}
+                <div class="repost webmention-item d-flex align-items-center mb-2">
+                    <img src="{{wm.author.photo}}" class="img-fluid rounded mr-2"/>
+                    <a href="{{wm.author.url}}">
+                        {% if wm.author.name %}
+                        {{wm.author.name}}
+                        {% else %}
+                        {{wm.author.url}}
+                        {% endif %}
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<span class="webmention">
+    <i class="fa fa-bookmark"></i>
+    <span class="bookmarks">{{ article.webmentions.bookmarks|count }}</span>
+</span>
+{% endif %}
+
+
 {% if article.webmentions.likes|count > 0 %}
 <a href="#" class="webmention" data-toggle="modal" data-target="#modalLikes-{{article_id}}">
     <i class="far fa-thumbs-up"></i>
@@ -34,7 +73,7 @@
 
 {% if article.webmentions.reposts|count > 0 %}
 <a href="#" class="webmention" data-toggle="modal" data-target="#modalReposts-{{article_id}}">
-    <i class="fas fa-retweet"></i>
+    <i class="fa fa-retweet"></i>
     <span class="reposts">{{ article.webmentions.reposts|count }}</span>
 </a>
 <div class="modal fade" id="modalReposts-{{article_id}}" tabindex="-1" role="dialog">
@@ -59,7 +98,7 @@
 </div>
 {% else %}
 <span class="webmention">
-    <i class="fas fa-retweet"></i>
+    <i class="fa fa-retweet"></i>
     <span class="reposts">{{ article.webmentions.reposts|count }}</span>
 </span>
 {% endif %}
