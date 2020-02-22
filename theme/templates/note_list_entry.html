@@ -34,6 +34,13 @@
                 -->
             </div>
             {% endfor %}
+
+            {% for bookmark in article.bookmark_of %}
+            <div class="my-4">
+                <i class="fa fa-bookmark mr-1"></i>
+                <a class="u-bookmark-of" href="{{bookmark}}">{{bookmark}}</a>
+            </div>
+            {% endfor %}
             
             <div class="my-4 entry-content e-content">
                 {{ article.content }}
