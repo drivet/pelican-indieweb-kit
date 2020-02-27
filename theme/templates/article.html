@@ -6,7 +6,14 @@
 {% set mainnavindex = 2 %}
 {% endif %}
 
-{% block title %}{{ article.title|striptags }} - {{ SITENAME }}{% endblock %}
+{% block title %}
+{% if article.title %}
+{{ article.title|striptags|truncate(100) }} - {{ SITENAME }}
+{% else %}
+{% include 'includes/note_title.html' %}
+{% endif %}
+{% endblock %}
+
 {% block html_lang %}{{ article.lang }}{% endblock %}
 
 

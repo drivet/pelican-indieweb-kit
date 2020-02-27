@@ -1,0 +1,9 @@
+{% if article.like_of %}
+Liked a post
+{% elif article.repost_of %}
+Reposted a post
+{% elif article.in_reply_to %}
+Replied to a post
+{% elif article.bookmark_of %}
+Bookmarked a post
+{% endif %}
