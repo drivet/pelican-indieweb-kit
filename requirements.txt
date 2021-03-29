@@ -16,7 +16,7 @@ mf2py==1.1.2
 mf2util==0.5.1
 pelican==4.0.1
 Pillow==6.0.0
-Pygments==2.3.1
+Pygments==2.7.4
 python-dateutil==2.8.0
 pytz==2019.1
 PyYAML==5.1
