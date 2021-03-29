@@ -12,7 +12,7 @@ mf2py==1.1.2
 mf2util==0.5.1
 pelican==4.1.0
 pkg-resources==0.0.0
-Pygments==2.4.2
+Pygments==2.7.4
 python-dateutil==2.8.0
 pytz==2019.2
 PyYAML==5.1.2
